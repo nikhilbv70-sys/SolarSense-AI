@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#F7F3E8">
+    <meta name="description" content="SolarSense AI solar plant intelligence dashboard. Simulated demonstration data only.">
+    <title>SolarSense AI | Plant overview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="fault-detection.css">
+    <link rel="stylesheet" href="maintenance-priority.css">
+    <link rel="stylesheet" href="css/maintenance-cost.css">
+    <link rel="stylesheet" href="modules.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+    <script src="api.js" defer></script>
+    <script src="theme.js" defer></script>
+    <script src="dashboard.js" defer></script>
+    <script src="monitoring.js" defer></script>
+    <script src="time-machine.js" defer></script>
+    <script src="data-management.js" defer></script>
+    <script src="app.js" defer></script>
+    <script src="sleep.js" defer></script>
+    <script src="data-hub.js" defer></script>
+    <script src="fault-detection.js" defer></script>
+    <script src="maintenance-priority.js" defer></script>
+    <script src="maintenance-cost.js" defer></script>
+    <script src="forecast.js" defer></script>
+    <script src="recovery.js" defer></script>
+    <script src="settings.js" defer></script>
+
+  </head>
+  <body>
+    <svg class="icon-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+      <symbol id="icon-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></symbol>
+      <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></symbol>
+      <symbol id="icon-moon" viewBox="0 0 24 24"><path d="M20.5 15.5A8.5 8.5 0 0 1 8.5 3.5 8.5 8.5 0 1 0 20.5 15.5Z"/></symbol>
+      <symbol id="icon-alert" viewBox="0 0 24 24"><path d="m10.3 3.9-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3l-8-14a2 2 0 0 0-3.4-.1Z"/><path d="M12 9v4m0 4h.01"/></symbol>
+      <symbol id="icon-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-5 5"/></symbol>
+      <symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+      <symbol id="icon-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a5 5 0 0 0-6.4 6.4L3 18l3 3 5.3-5.3a5 5 0 0 0 6.4-6.4L14 12l-3-3z"/></symbol>
+      <symbol id="icon-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></symbol>
+      <symbol id="icon-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.7a8 8 0 0 1-1.7 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.7-1l-1.7.7-1.4-2.4 1.4-1.1a7 7 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.7a8 8 0 0 1 1.7-1l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.7 1l1.7-.7 1.4 2.4-1.4 1.1a7 7 0 0 1 0 2Z" transform="translate(-1 -1)"/></symbol>
+      <symbol id="icon-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-8 12a2 2 0 0 0 4 0"/></symbol>
+      <symbol id="icon-chevron" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+      <symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+      <symbol id="icon-spark" viewBox="0 0 24 24"><path d="m12 3 1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2L12 3Z"/><path d="m19 14 .9 2.1L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.9L19 14Z"/></symbol>
+      <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></symbol>
+      <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+      <symbol id="icon-upload" viewBox="0 0 24 24"><path d="M12 16V4m-5 5 5-5 5 5"/><path d="M20 16.5v3A1.5 1.5 0 0 1 18.5 21h-13A1.5 1.5 0 0 1 4 19.5v-3"/></symbol>
+    </svg>
+
+    <div class="app-shell">
+      <nav class="navigation" id="sidebar" aria-label="Dashboard sections">
+        <button class="nav-item is-active" type="button" data-section="overview" title="Overview">
+          <svg class="icon"><use href="#icon-grid"/></svg><span>Overview</span>
+        </button>
+        <button class="nav-item" type="button" data-section="monitoring" title="Plant Monitoring">
+          <svg class="icon"><use href="#icon-sun"/></svg><span>Plant Monitoring</span>
+        </button>
+        <button class="nav-item" type="button" data-section="faults" title="Fault Detection">
+          <svg class="icon"><use href="#icon-alert"/></svg><span>Fault Detection</span><span class="nav-count">2</span>
+        </button>
+        <button class="nav-item" type="button" data-section="prediction" title="Energy Prediction">
+          <svg class="icon"><use href="#icon-chart"/></svg><span>Energy Prediction</span>
+        </button>
+        <button class="nav-item" type="button" data-section="time-machine" title="Time Machine">
+          <svg class="icon"><use href="#icon-clock"/></svg><span>Time Machine</span>
+        </button>
+        <button class="nav-item" type="button" data-section="cost" title="Maintenance Cost">
+          <svg class="icon"><use href="#icon-chart"/></svg><span>Maintenance Cost</span>
+        </button>
+        <button class="nav-item" type="button" data-section="priority" title="Maintenance Priority">
+          <svg class="icon"><use href="#icon-wrench"/></svg><span>Maintenance Priority</span>
+        </button>
+        <button class="nav-item" type="button" data-section="recovery" title="Recovery Verification">
+          <svg class="icon"><use href="#icon-chart"/></svg><span>Recovery Verification</span>
+        </button>
+        <button class="nav-item" type="button" data-section="data" title="Data Management">
+          <svg class="icon"><use href="#icon-database"/></svg><span>Data Management</span>
+        </button>
+        <button class="nav-item" type="button" data-section="external" title="External Data Hub">
+           <svg class="icon"><use href="#icon-database"/></svg><span>External Data Hub</span>
+         </button>
+         <button class="nav-item" type="button" data-section="settings" title="Settings">
+          <svg class="icon"><use href="#icon-settings"/></svg><span>Settings</span>
+        </button>
+      </nav>
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="SolarSense AI home" data-home>
+          <span class="brand-mark"><img src="/assets/logo.jpg" alt=""></span>
+          <span class="brand-copy"><strong>SolarSense<span>AI</span></strong><small>ENERGY INTELLIGENCE</small></span>
+        </a>
+        <span class="sr-only" id="breadcrumb-current">Overview</span>
+        <div class="topbar-actions">
+          <button class="icon-button" id="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode">
+            <svg class="icon theme-sun"><use href="#icon-sun"/></svg>
+            <svg class="icon theme-moon"><use href="#icon-moon"/></svg>
+          </button>
+          <span class="demo-chip"><span class="demo-dot"></span> DEMO</span>
+          <div class="notification-wrap">
+            <button class="icon-button notification-button" type="button" id="notification-button" aria-label="Show notifications" aria-expanded="false">
+              <svg class="icon"><use href="#icon-bell"/></svg><span class="notification-dot"></span>
+            </button>
+            <div class="notification-popover" id="notification-popover" hidden>
+              <div class="popover-heading"><strong>Notifications</strong><span>2 new</span></div>
+              <p><span class="alert-indicator amber"></span><span><strong>Output below expected</strong><small>Array group B · sample alert</small></span></p>
+              <p><span class="alert-indicator green"></span><span><strong>Simulation ready</strong><small>Demonstration environment</small></span></p>
+            </div>
+          </div>
+          <button class="icon-button top-settings" type="button" data-section="settings" aria-label="Settings">
+            <svg class="icon"><use href="#icon-settings"/></svg>
+          </button>
+          <button class="profile-button" type="button" id="profile-button" aria-label="Open account menu">
+            <span class="avatar">AR</span>
+            <span class="profile-copy"><strong>Alex Rivera</strong><small>Plant operator</small></span>
+          </button>
+          <button class="signout-button" type="button" id="signout-button" hidden>Sign out</button>
+        </div>
+      </header>
+
+      <main class="main-area">
+
+        <div class="content">
+          <section class="view-panel" id="overview-view" aria-labelledby="page-title">
+            <section class="hero-panel" aria-labelledby="page-title">
+              <div class="hero-copy">
+                <p class="eyebrow"><span class="status-pulse"></span> SOLAR INTELLIGENCE · DEMO PLANT</p>
+                <h1 id="page-title">Welcome to<br><span>SolarSense AI</span></h1>
+                <p class="hero-description">Monitor solar performance. Detect anomalies.<br class="hero-break"> Predict energy. Optimise operations.</p>
+                <button class="hero-button" type="button" data-section-link="time-machine"><svg class="icon"><use href="#icon-spark"/></svg> Explore your energy future <svg class="icon hero-button-arrow"><use href="#icon-arrow"/></svg></button>
+              </div>
+              <div class="hero-side-card">
+                <span class="hero-card-kicker"><i></i> NORTHFIELD SOLAR</span>
+                <strong>2.4 <small>MW</small></strong>
+                <span class="hero-card-caption">Installed capacity · demo profile</span>
+                <div class="hero-energy-flow"><i></i><i></i><i></i><i></i><span>ENERGY FLOW · SIMULATED</span></div>
+              </div>
+              <div class="hero-meta"><span><i></i> Simulated demonstration environment</span><span>Operator review required for all alerts</span></div>
+            </section>
+
+            <div class="notice-banner" role="note">
+              <svg class="icon"><use href="#icon-spark"/></svg>
+              <span><strong>Demonstration data</strong> &nbsp; All readings on this page are simulated for the SolarSense AI prototype. No physical sensors are connected.</span>
+              <button class="notice-dismiss" id="dismiss-notice" type="button" aria-label="Dismiss data notice">×</button>
+            </div>
+
+            <div class="section-toolbar">
+              <div class="section-title"><h2>Plant at a glance</h2><span class="last-updated">Sample plant · Today</span></div>
+              <div class="period-control" role="group" aria-label="Chart time period">
+                <button type="button" data-period="day" class="is-selected" aria-pressed="true">Day</button>
+                <button type="button" data-period="week" aria-pressed="false">Week</button>
+                <button type="button" data-period="month" aria-pressed="false">Month</button>
+              </div>
+            </div>
+
+            <div class="kpi-grid">
+              <article class="metric-card">
+                <div class="metric-top"><span>Total energy generated</span><span class="metric-icon green"><svg class="icon"><use href="#icon-sun"/></svg></span></div>
+                <div class="metric-value"><strong id="generated-value">8,420</strong><span>kWh</span></div>
+                <div class="metric-foot"><span class="trend positive">↗ 4.8%</span><span>vs. prior period</span></div>
+              </article>
+              <article class="metric-card">
+                <div class="metric-top"><span>Expected energy</span><span class="metric-icon blue"><svg class="icon"><use href="#icon-chart"/></svg></span></div>
+                <div class="metric-value"><strong id="expected-value">9,100</strong><span>kWh</span></div>
+                <div class="metric-foot"><span class="subtle-copy">Model reference</span><span>simulated estimate</span></div>
+              </article>
+              <article class="metric-card">
+                <div class="metric-top"><span>Actual vs expected</span><span class="metric-icon amber"><svg class="icon"><use href="#icon-arrow"/></svg></span></div>
+                <div class="metric-value"><strong id="performance-value">92.5</strong><span>%</span></div>
+                <div class="metric-foot"><span class="trend caution">−7.5%</span><span>performance gap</span></div>
+              </article>
+              <article class="metric-card">
+                <div class="metric-top"><span>Active anomalies</span><span class="metric-icon red"><svg class="icon"><use href="#icon-alert"/></svg></span></div>
+                <div class="metric-value"><strong>02</strong><span class="metric-unit-word">to review</span></div>
+                <div class="metric-foot"><span class="severity-mini"><i></i><i></i></span><span>Requires operator review</span></div>
+              </article>
+            </div>
+
+            <div class="dashboard-grid">
+              <article class="panel energy-panel">
+                <div class="panel-heading">
+                  <div><h2>Energy generation</h2><p>Actual output against expected generation</p></div>
+                  <button class="chart-menu" id="chart-info-button" type="button" aria-label="About this chart">i</button>
+                </div>
+                <div class="chart-legend"><span><i class="legend-dot actual"></i>Actual generation</span><span><i class="legend-dot expected"></i>Expected generation</span></div>
+                <div class="chart-container"><canvas id="energy-chart" role="img" aria-label="Line chart comparing actual and expected simulated energy generation"></canvas></div>
+                <div class="chart-caption"><span>Source: simulated demonstration profile</span><span id="chart-unit">Energy · kWh</span></div>
+              </article>
+
+              <article class="panel health-panel">
+                <div class="panel-heading"><div><h2>Plant health</h2><p>Operational status overview</p></div><span class="health-status"><i></i> Operating</span></div>
+                <div class="health-score-wrap">
+                  <div class="health-ring" role="img" aria-label="Plant health score: 87 out of 100"><div><strong>87</strong><span>/ 100</span></div></div>
+                  <div class="health-copy"><strong>Good condition</strong><span>Based on simulated indicators</span><small>Performance is within the expected operating range, with a gap to investigate.</small></div>
+                </div>
+                <div class="health-breakdown">
+                  <div><span>Generation</span><div class="mini-track"><i style="width: 82%"></i></div><strong>82%</strong></div>
+                  <div><span>Inverter</span><div class="mini-track"><i style="width: 96%"></i></div><strong>96%</strong></div>
+                  <div><span>Availability</span><div class="mini-track"><i style="width: 99%"></i></div><strong>99%</strong></div>
+                </div>
+                <div class="health-foot"><span class="health-square"></span> Plant operating status is simulated</div>
+              </article>
+            </div>
+
+            <article class="panel alerts-panel">
+              <div class="panel-heading alerts-heading">
+                <div><h2>Recent alerts</h2><p>Items flagged by transparent prototype rules</p></div>
+                <button class="text-button" type="button" data-section-link="faults">View all alerts <svg class="icon"><use href="#icon-arrow"/></svg></button>
+              </div>
+              <div class="alert-table-wrap">
+                <table class="alert-table">
+                  <thead><tr><th>Alert</th><th>Plant area</th><th>Severity</th><th>Observed</th><th>Status</th></tr></thead>
+                  <tbody>
+                    <tr><td><span class="alert-name"><span class="alert-indicator amber"></span><span><strong>Output below expected</strong><small>Difference exceeds demonstration threshold</small></span></span></td><td>Array group B</td><td><span class="severity-pill medium">Medium</span></td><td>14 min ago</td><td><span class="review-status"><i></i>Needs review</span></td></tr>
+                    <tr><td><span class="alert-name"><span class="alert-indicator blue"></span><span><strong>Temperature reading elevated</strong><small>Review operating conditions</small></span></span></td><td>Inverter 02</td><td><span class="severity-pill low">Low</span></td><td>38 min ago</td><td><span class="review-status"><i></i>Needs review</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="operator-note">Alerts indicate patterns for investigation only. They are not confirmed diagnoses.</p>
+            </article>
+
+            <div class="overview-support-grid">
+              
+<article class="panel support-panel prediction-support">
+  <div class="support-heading">
+    <span class="support-icon">
+      <svg class="icon"><use href="#icon-chart"/></svg>
+    </span>
+    <span class="support-label">AI POWER FORECAST</span>
+  </div>
+
+  <p class="support-title">Solar generation prediction</p>
+
+  <strong class="support-value">
+    <span id="ai-predicted-power">--</span>
+    <small>KW</small>
+  </strong>
+
+  <div class="sparkline" aria-hidden="true">
+    <i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i>
+  </div>
+
+  <div class="support-foot">
+    <span id="ai-forecast-status" aria-live="polite">
+      Waiting for prediction
+    </span>
+    <span id="ai-model-name">Random Forest AI</span>
+  </div>
+
+  <div class="support-foot">
+    <span>Next 15-minute observation</span>
+    <button class="inline-link" type="button"
+      data-section-link="prediction">
+      View forecast
+      <svg class="icon"><use href="#icon-arrow"/></svg>
+    </button>
+  </div>
+</article>
+</article>
+              <article class="panel support-panel cost-support">
+                <div class="support-heading"><span class="support-icon lime"><svg class="icon"><use href="#icon-chart"/></svg></span><span class="severity-pill medium">₹ ESTIMATE</span></div>
+                <p class="support-title">Maintenance cost</p>
+                <strong class="support-recommendation"><span id="overview-cost-total">--</span></strong>
+                <p class="support-evidence" id="overview-cost-status">Estimated maintenance spend on sustained underperformance. Sign in to load.</p>
+                <div class="system-row"><span>Energy loss value</span><strong id="overview-cost-loss">--</strong></div>
+                <div class="system-row"><span>Net recovery</span><strong id="overview-cost-net">--</strong></div>
+                <button class="inline-link" type="button" data-section-link="cost">Open cost view <svg class="icon"><use href="#icon-arrow"/></svg></button>
+              </article>
+              <article class="panel support-panel system-support">
+                <div class="support-heading"><span class="support-icon"><svg class="icon"><use href="#icon-settings"/></svg></span><span class="system-ok"><i></i> DEMO STATUS</span></div>
+                <p class="support-title">System status</p>
+                <div class="system-row"><span>Solar plant</span><strong><i></i> Operating</strong></div>
+                <div class="system-row"><span>Inverters</span><strong>2 / 2 online</strong></div>
+                <div class="system-row"><span>Data quality</span><strong>Sample profile</strong></div>
+                <div class="system-row"><span>Last sample</span><strong>12:00 · simulated</strong></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="view-panel monitoring-view" id="monitoring-view" aria-labelledby="monitoring-title" hidden>
+            <div class="page-heading">
+              <div>
+                <p class="eyebrow"><span class="status-pulse"></span> SIMULATED PLANT DATA</p>
+                <h1 id="monitoring-title">Plant monitoring</h1>
+                <p class="page-description">Plant-level sample readings for Northfield Solar. No physical sensors are connected.</p>
+              </div>
+              <div class="monitoring-actions">
+                <span class="sample-clock"><span class="sample-clock-dot"></span><span id="sample-time">Sample · 12:00</span></span>
+                <button class="primary-button" id="generate-reading" type="button"><svg class="icon"><use href="#icon-spark"/></svg> Generate sample reading</button>
+              </div>
+            </div>
+
+            <div class="notice-banner monitoring-notice" role="note">
+              <svg class="icon"><use href="#icon-spark"/></svg>
+              <span><strong>Simulated readings</strong> &nbsp; Values are generated locally for demonstration. Power is estimated from simulated plant conditions and voltage/current.</span>
+            </div>
+
+            <div class="section-toolbar monitoring-toolbar">
+              <div class="section-title"><h2>Current sample</h2><span class="last-updated">Northfield Solar · 2.4 MW</span></div>
+              <span class="reading-sequence" id="reading-sequence">Sample 01</span>
+            </div>
+
+            <div class="monitoring-metrics">
+              <article class="metric-card monitoring-metric">
+                <div class="metric-top"><span>Solar irradiance</span><span class="metric-icon amber"><svg class="icon"><use href="#icon-sun"/></svg></span></div>
+                <div class="metric-value"><strong id="irradiance-value">782</strong><span>W/m²</span></div>
+                <div class="metric-foot"><span class="subtle-copy">Simulated plant average</span></div>
+              </article>
+              <article class="metric-card monitoring-metric">
+                <div class="metric-top"><span>Panel temperature</span><span class="metric-icon red"><svg class="icon"><use href="#icon-sun"/></svg></span></div>
+                <div class="metric-value"><strong id="temperature-value">45.2</strong><span>°C</span></div>
+                <div class="metric-foot"><span class="subtle-copy">Ambient and operating conditions vary</span></div>
+              </article>
+              <article class="metric-card monitoring-metric">
+                <div class="metric-top"><span>DC voltage</span><span class="metric-icon blue"><svg class="icon"><use href="#icon-chart"/></svg></span></div>
+                <div class="metric-value"><strong id="voltage-value">618</strong><span>V</span></div>
+                <div class="metric-foot"><span class="subtle-copy">Illustrative plant-level value</span></div>
+              </article>
+              <article class="metric-card monitoring-metric">
+                <div class="metric-top"><span>DC current</span><span class="metric-icon green"><svg class="icon"><use href="#icon-arrow"/></svg></span></div>
+                <div class="metric-value"><strong id="current-value">2,568</strong><span>A</span></div>
+                <div class="metric-foot"><span class="subtle-copy">Illustrative plant-level value</span></div>
+              </article>
+              <article class="metric-card monitoring-metric power-metric">
+                <div class="metric-top"><span>Power output</span><span class="metric-icon green"><svg class="icon"><use href="#icon-spark"/></svg></span></div>
+                <div class="metric-value"><strong id="power-value">1,587</strong><span>kW</span></div>
+                <div class="metric-foot"><span class="power-status"><i></i>Generating · simulated</span></div>
+              </article>
+              <article class="metric-card monitoring-metric">
+                <div class="metric-top"><span>Inverter status</span><span class="metric-icon green"><svg class="icon"><use href="#icon-settings"/></svg></span></div>
+                <div class="inverter-value"><span class="health-status"><i></i><strong id="inverter-value">2 / 2 Online</strong></span></div>
+                <div class="metric-foot"><span class="subtle-copy">Demonstration status only</span></div>
+              </article>
+            </div>
+
+            <div class="monitoring-chart-toolbar">
+              <div class="section-title"><h2>Operating trends</h2><span class="last-updated">Sample interval · 15 minutes</span></div>
+              <div class="monitoring-chart-actions">
+                <button class="reset-button" id="reset-readings" type="button">Reset samples</button>
+                <div class="period-control" role="group" aria-label="Monitoring chart time range">
+                  <button type="button" data-monitor-range="1h" aria-pressed="false">1 hour</button>
+                  <button type="button" data-monitor-range="3h" aria-pressed="false">3 hours</button>
+                  <button type="button" data-monitor-range="6h" class="is-selected" aria-pressed="true">6 hours</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="monitoring-chart-grid">
+              <article class="panel monitoring-chart-panel">
+                <div class="panel-heading"><div><h2>Power output</h2><p>Estimated plant output from the sample profile</p></div><span class="chart-unit-pill">kW</span></div>
+                <div class="monitor-chart-container"><canvas id="power-chart" role="img" aria-label="Line chart of simulated plant power output"></canvas></div>
+                <div class="chart-caption"><span>Locally generated demonstration values</span><span>Plant capacity · 2.4 MW</span></div>
+              </article>
+              <article class="panel monitoring-chart-panel">
+                <div class="panel-heading"><div><h2>Site conditions</h2><p>Irradiance and panel temperature sample profile</p></div></div>
+                <div class="conditions-legend"><span><i class="legend-dot expected"></i>Irradiance · W/m²</span><span><i class="legend-dot temperature"></i>Temperature · °C</span></div>
+                <div class="monitor-chart-container conditions-chart-container"><canvas id="conditions-chart" role="img" aria-label="Chart of simulated irradiance and panel temperature"></canvas></div>
+                <div class="chart-caption"><span>Indicative conditions · not sensor measurements</span><span>15 min intervals</span></div>
+              </article>
+            </div>
+
+            <div class="monitoring-footnote"><svg class="icon"><use href="#icon-alert"/></svg><span>Plant-level voltage and current are illustrative in this prototype. Electrical readings alone cannot confirm physical shading, soiling, or a specific fault.</span></div>
+          </section>
+
+          <section class="view-panel time-machine-view" id="time-machine-view" aria-labelledby="time-machine-title" hidden>
+            <div class="time-machine-hero">
+              <p class="eyebrow"><span class="status-pulse"></span> ASSUMPTION-LED SCENARIO TOOL</p>
+              <h1 id="time-machine-title">Travel through your solar plant's <span>energy future</span></h1>
+              <p>Explore how different performance assumptions could affect estimated generation. Adjust the controls to compare scenarios.</p>
+              <span class="estimate-label"><svg class="icon"><use href="#icon-alert"/></svg> Future values are estimates, not guarantees or validated forecasts.</span>
+            </div>
+
+            <div class="time-machine-controls panel">
+              <div class="scenario-control">
+                <label for="horizon-slider"><span>Scenario horizon</span><strong><output id="horizon-output" for="horizon-slider">30 days</output></strong></label>
+                <input id="horizon-slider" type="range" min="7" max="90" value="30" step="1">
+                <div class="slider-ends"><span>7 days</span><span>90 days</span></div>
+              </div>
+              <div class="scenario-control">
+                <label for="degradation-slider"><span>Additional performance gap</span><strong><output id="degradation-output" for="degradation-slider">5 pp</output></strong></label>
+                <input id="degradation-slider" type="range" min="0" max="20" value="5" step="1">
+                <div class="slider-ends"><span>No additional gap</span><span>−20 percentage points</span></div>
+              </div>
+              <div class="scenario-control">
+                <label for="improvement-slider"><span>Assumed improvement after inspection</span><strong><output id="improvement-output" for="improvement-slider">4 pp</output></strong></label>
+                <input id="improvement-slider" type="range" min="0" max="10" value="4" step="1">
+                <div class="slider-ends"><span>0 pp</span><span>+10 percentage points</span></div>
+              </div>
+              <button class="reset-button scenario-reset" id="reset-scenario" type="button">Reset assumptions</button>
+            </div>
+
+            <div class="scenario-card-grid">
+              <article class="scenario-card current-scenario">
+                <div class="scenario-card-top"><span class="scenario-number">01</span><span class="scenario-tag">BASELINE</span></div>
+                <p class="scenario-name">Current condition</p>
+                <strong class="scenario-energy" id="current-energy">252,600 <small>kWh</small></strong>
+                <span class="scenario-performance"><span>Performance basis</span><strong id="current-performance">92.5%</strong></span>
+                <p class="scenario-description">Current estimated output continues across the selected horizon without additional change.</p>
+                <div class="scenario-flow" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+              </article>
+              <article class="scenario-card underperformance-scenario">
+                <div class="scenario-card-top"><span class="scenario-number">02</span><span class="scenario-tag warning-tag">WHAT IF · GAP WIDENS</span></div>
+                <p class="scenario-name">Continued underperformance</p>
+                <strong class="scenario-energy" id="underperformance-energy">238,950 <small>kWh</small></strong>
+                <span class="scenario-performance"><span>Assumed performance</span><strong id="underperformance-performance">87.5%</strong></span>
+                <p class="scenario-description">Illustrates a larger performance gap, using your selected additional-gap assumption.</p>
+                <div class="scenario-flow warning-flow" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+              </article>
+              <article class="scenario-card maintenance-scenario">
+                <div class="scenario-card-top"><span class="scenario-number">03</span><span class="scenario-tag lime-tag">WHAT IF · ASSUMED</span></div>
+                <p class="scenario-name">Assumed maintenance</p>
+                <strong class="scenario-energy" id="maintenance-energy">263,520 <small>kWh</small></strong>
+                <span class="scenario-performance"><span>Assumed performance</span><strong id="maintenance-performance">96.5%</strong></span>
+                <p class="scenario-description">Applies your selected improvement as an assumption only; no recovery is guaranteed.</p>
+                <div class="scenario-flow lime-flow" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+              </article>
+            </div>
+
+            <div class="scenario-analysis-grid">
+              <article class="panel scenario-chart-panel">
+                <div class="panel-heading"><div><h2>Estimated generation comparison</h2><p>Calculated locally from selected assumptions · kWh</p></div><span class="chart-unit-pill">WHAT-IF</span></div>
+                <div class="scenario-chart-container"><canvas id="scenario-chart" role="img" aria-label="Bar chart comparing estimated energy across three user-assumed scenarios"></canvas></div>
+              </article>
+              <article class="panel assumptions-panel">
+                <div class="panel-heading"><div><h2>How this estimate works</h2><p>Transparent prototype calculation</p></div></div>
+                <div class="assumption-equation"><span>Expected daily baseline</span><strong id="assumption-baseline">Loading…</strong></div>
+                <div class="assumption-equation"><span>Actual ÷ expected ratio</span><strong id="assumption-performance">—</strong></div>
+                <div class="assumption-equation"><span>Scenario horizon</span><strong id="assumption-horizon">30 days</strong></div>
+                <p class="assumption-note">Estimated generation = expected daily baseline × scenario performance × selected days. The maintenance slider changes an assumed percentage only. Real outcomes depend on site conditions and verified inspection findings.</p>
+                <p class="assumption-note" id="baseline-status">Loading imported plant data…</p>
+                <p class="assumption-note"><strong>Data source:</strong> <span id="baseline-source">—</span>. Expected power is an estimate (capacity × irradiance × 0.8), not a measured value.</p>
+              </article>
+            </div>
+
+            <article class="panel trend-panel">
+              <div class="panel-heading"><div><h2>Daily generation trend</h2><p>Imported Plant 1 readings · actual vs estimated expected · kWh per day</p></div><span class="chart-unit-pill">HISTORY</span></div>
+              <div class="scenario-chart-container"><canvas id="trend-chart" role="img" aria-label="Line chart of daily actual and estimated expected generation for the imported plant data"></canvas></div>
+            </article>
+            <p class="operator-note time-machine-note">This interactive scenario is a demonstration calculation, not an engineering forecast, diagnosis, energy guarantee, or financial-savings estimate.</p>
+          </section>
+
+          <section class="view-panel fault-view" id="fault-view" aria-labelledby="fault-title" hidden>
+            <div class="time-machine-hero">
+              <p class="eyebrow"><span class="status-pulse"></span> SIMULATED LIVE FEED</p>
+              <h1 id="fault-title">Fault detection <span>simulation</span></h1>
+              <p>Watch a simulated 1 MW plant produce power, inject a fault, and see how the detection rules react. Every reading here is generated, not measured.</p>
+              <span class="estimate-label"><svg class="icon"><use href="#icon-alert"/></svg> Simulated data. Electrical readings alone cannot confirm a physical fault.</span>
+            </div>
+
+            <div class="panel fault-controls">
+              <div class="fault-control-row">
+                <label for="fault-scenario"><span>Inject scenario</span>
+                  <select id="fault-scenario"></select>
+                </label>
+                <label for="fault-day"><span>Real day replayed</span>
+                  <select id="fault-day"></select>
+                </label>
+                <label for="fault-speed"><span>Simulation speed</span>
+                  <select id="fault-speed">
+                    <option value="1">1× (one interval per second)</option>
+                    <option value="2" selected>2×</option>
+                    <option value="4">4×</option>
+                  </select>
+                </label>
+              </div>
+              <div class="fault-buttons">
+                <button class="reset-button" id="fault-toggle" type="button">Pause live feed</button>
+                <button class="reset-button" id="fault-reset" type="button">Reset simulation</button>
+                <button class="fault-primary" id="fault-demo" type="button">Run demonstration</button>
+              </div>
+              <p class="fault-narration" id="fault-narration" aria-live="polite"></p>
+              <p class="assumption-note" id="fault-status"></p>
+            </div>
+
+            <div class="fault-readouts">
+              <div class="panel fault-readout"><span>Simulated time</span><strong id="fault-time">—</strong></div>
+              <div class="panel fault-readout"><span>Irradiance (sensor reading)</span><strong id="fault-irr">—</strong></div>
+              <div class="panel fault-readout"><span>Module temperature</span><strong id="fault-temp">—</strong></div>
+              <div class="panel fault-readout"><span>Actual output</span><strong id="fault-actual">—</strong></div>
+              <div class="panel fault-readout"><span>Expected output</span><strong id="fault-expected">—</strong></div>
+              <div class="panel fault-readout"><span>Deviation</span><strong id="fault-dev">—</strong></div>
+            </div>
+
+            <div class="fault-analysis-grid">
+              <article class="panel">
+                <div class="panel-heading"><div><h2>Live actual vs expected</h2><p>Simulated 1 MW plant · kW per 15-minute interval</p></div><span class="chart-unit-pill">SIMULATED</span></div>
+                <div class="fault-chart-container"><canvas id="fault-chart" role="img" aria-label="Live line chart of simulated actual and expected output"></canvas></div>
+              </article>
+              <article class="panel">
+                <div class="panel-heading"><div><h2>Detection alerts</h2><p>Rule-based evidence, not a statistical confidence score</p></div><span class="chart-unit-pill" id="fault-alert-count">0 alerts</span></div>
+                <div class="fault-alerts-list" id="fault-alerts"></div>
+              </article>
+            </div>
+
+            <article class="panel fault-rules-panel">
+              <div class="panel-heading"><div><h2>How detection works</h2><p>Every rule is visible here</p></div></div>
+              <ul class="assumption-note">
+                <li>Checks run only when the irradiance reading is at least 200 W/m² (daylight).</li>
+                <li>An alert is raised after 3 consecutive intervals below −15% (underperformance) or above +25% (output above expected).</li>
+                <li>Alerts clear when the deviation returns within the normal band.</li>
+                <li>Evidence checks count what the data supports. They never confirm a physical fault.</li>
+              </ul>
+            </article>
+            <p class="operator-note time-machine-note">Simulated feed for demonstration only. Use field inspection to confirm any cause.</p>
+          </section>
+
+          <section class="view-panel priority-view" id="priority-view" aria-labelledby="priority-title" hidden>
+            <div class="priority-heading">
+              <div>
+                <p class="eyebrow">Detect · Explain · Prioritise</p>
+                <h2 id="priority-title">Maintenance Priority</h2>
+                <p class="priority-subtitle" id="priority-subtitle">Ranked from real imported readings. Priorities are rule-based, not confirmed faults.</p>
+              </div>
+              <button class="secondary-button" type="button" id="priority-refresh">Refresh</button>
+            </div>
+            <p class="priority-status" id="priority-status" aria-live="polite"></p>
+            <div class="priority-counts" id="priority-counts"></div>
+            <div class="priority-table-wrap">
+              <table class="priority-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Rank</th>
+                    <th scope="col">Priority</th>
+                    <th scope="col">Window</th>
+                    <th scope="col">Deviation</th>
+                    <th scope="col">Est. loss</th>
+                    <th scope="col">Reason</th>
+                    <th scope="col">Recommended inspection</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="priority-rows"></tbody>
+              </table>
+            </div>
+            <details class="priority-rules">
+              <summary>How priority is calculated</summary>
+              <p id="priority-rules"></p>
+            </details>
+            <p class="operator-note">Source: imported plant readings. Priorities are rule-based. Use field inspection to confirm any cause.</p>
+          </section>
+
+          <section class="view-panel cost-view" id="cost-view" aria-labelledby="cost-title" hidden>
+            <div class="priority-heading">
+              <div>
+                <p class="eyebrow">Estimate · Calculate · Plan</p>
+                <h2 id="cost-title">Maintenance Cost</h2>
+                <p class="priority-subtitle" id="cost-subtitle">Rupee estimates built from the imported readings and this plant's capacity.</p>
+              </div>
+              <button class="secondary-button" type="button" id="cost-refresh">Refresh</button>
+            </div>
+            <p class="priority-status" id="cost-status" aria-live="polite"></p>
+            <div class="cost-kpis" id="cost-kpis"></div>
+            <div class="priority-counts" id="cost-bands"></div>
+            <div class="priority-table-wrap">
+              <table class="priority-table cost-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Priority</th>
+                    <th scope="col">Date and window</th>
+                    <th scope="col">Energy lost</th>
+                    <th scope="col">Lost value</th>
+                    <th scope="col">Inspection</th>
+                    <th scope="col">Corrective work</th>
+                    <th scope="col">Total cost</th>
+                    <th scope="col">Net recovery</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="cost-rows"></tbody>
+              </table>
+            </div>
+            <details class="priority-rules">
+              <summary>Cost assumptions</summary>
+              <p id="cost-assumptions"></p>
+            </details>
+            <p class="operator-note">Rupee values are planning estimates, not contractor quotes. Net recovery = lost energy value minus maintenance cost.</p>
+          </section>
+
+          <section class="view-panel data-view" id="data-view" aria-labelledby="data-title" hidden>
+            <div class="data-page-heading">
+              <div>
+                <p class="eyebrow"><span class="status-pulse"></span> LOCAL DEMO PROCESSING</p>
+                <h1 id="data-title">Data management</h1>
+                <p class="page-description">Review and validate sample plant readings in this browser before future backend integration.</p>
+              </div>
+              <button class="reset-button" id="clear-csv" type="button" disabled>Clear preview</button>
+            </div>
+            <div class="data-notice"><svg class="icon"><use href="#icon-alert"/></svg><span>Files are parsed locally for this prototype. They are not sent to a server or saved to a database.</span></div>
+            <div class="upload-layout">
+              <article class="panel upload-panel">
+                <div class="panel-heading"><div><h2>Import plant readings</h2><p>CSV format · Maximum 5 MB</p></div><span class="chart-unit-pill">.CSV</span></div>
+                <div class="drop-zone" id="drop-zone" role="group" tabindex="0" aria-label="CSV file drop area">
+                  <input id="csv-input" type="file" accept=".csv,text/csv" hidden>
+                  <span class="upload-icon"><svg class="icon"><use href="#icon-upload"/></svg></span>
+                  <strong>Drop a CSV file here</strong>
+                  <span>or <button class="inline-link" id="choose-csv" type="button">browse files</button></span>
+                  <small>Expected columns: timestamp, irradiance, panel_temperature, voltage, current, power, expected_power, inverter_status</small>
+                </div>
+                <button class="sample-download" id="download-sample" type="button"><svg class="icon"><use href="#icon-database"/></svg> Download sample CSV</button>
+              </article>
+              <article class="panel validation-panel">
+                <div class="panel-heading"><div><h2>Validation status</h2><p>Format and value checks</p></div></div>
+                <div class="validation-status idle" id="validation-status"><span class="validation-mark">·</span><span id="validation-message">Choose a CSV file to begin local validation.</span></div>
+                <ul class="validation-list" id="validation-list"><li>CSV header and required fields</li><li>Missing values and numeric readings</li><li>Sample preview · first 6 rows</li></ul>
+              </article>
+            </div>
+            <article class="panel preview-panel" id="preview-panel" hidden>
+              <div class="panel-heading"><div><h2 id="preview-title">CSV preview</h2><p id="preview-description">Data remains in this browser session.</p></div><span class="chart-unit-pill" id="preview-count">0 rows</span></div>
+              <div class="csv-preview-wrap"><table class="csv-preview-table"><thead id="csv-head"></thead><tbody id="csv-body"></tbody></table></div>
+            </article>
+          </section>
+
+          <section class="view-panel external-data-view" id="external-view" aria-labelledby="external-title" hidden>
+            <div class="data-page-heading">
+              <div>
+                <p class="eyebrow">PUBLIC DATA SOURCES</p>
+                <h2 id="external-title">External Data Hub</h2>
+              </div>
+            </div>
+
+            <form class="module-form external-form" id="external-form">
+              <label>Latitude <input name="latitude" type="number" step="0.0001" min="-90" max="90" value="28.6139" required></label>
+              <label>Longitude <input name="longitude" type="number" step="0.0001" min="-180" max="180" value="77.2090" required></label>
+              <label>Start date <input name="start" type="date" required></label>
+              <label>End date <input name="end" type="date" required></label>
+              <label>PV size (kWp) <input name="peak_power_kw" type="number" step="0.1" min="0.1" value="1"></label>
+              <button class="primary-button" type="submit">Fetch data</button>
+            </form>
+
+            <div class="external-providers" id="external-providers" aria-live="polite"></div>
+            <div class="external-error" id="external-error" role="alert" hidden></div>
+            <div class="external-charts" id="external-charts" hidden></div>
+            <h3>Summary by source and parameter</h3>
+            <div class="module-table-wrap">
+              <table class="module-table">
+                <thead><tr><th>Source</th><th>Parameter</th><th>Unit</th><th>Average</th><th>Minimum</th><th>Maximum</th><th>Records</th></tr></thead>
+                <tbody id="external-summary-rows"><tr><td colspan="7">Choose dates and fetch data.</td></tr></tbody>
+              </table>
+            </div>
+            <h3>Daily values</h3>
+            <div class="module-table-wrap">
+              <table class="module-table" id="external-pivot">
+                <tbody id="external-rows"><tr><td>Choose dates and fetch data.</td></tr></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="view-panel module-view prediction-view" id="prediction-view" aria-labelledby="prediction-title" hidden>
+            <div class="module-heading">
+              <div>
+                <p class="eyebrow">FORECAST · NOT MEASURED</p>
+                <h2 id="prediction-title">Energy Prediction</h2>
+                <p class="module-subtitle" id="prediction-subtitle">Model estimates driven by Open-Meteo weather forecasts. Forecast values are never shown as measured generation.</p>
+              </div>
+              <div class="module-actions">
+                <div class="segmented" role="group" aria-label="Forecast horizon">
+                  <button class="is-selected" type="button" data-horizon="24h">24 hours</button>
+                  <button type="button" data-horizon="7d">7 days</button>
+                  <button type="button" data-horizon="30d">30 days</button>
+                </div>
+                <button class="secondary-button" type="button" id="forecast-refresh">Refresh</button>
+                <button class="secondary-button" type="button" id="forecast-save">Save run</button>
+                <button class="primary-button" type="button" id="forecast-download">Download CSV</button>
+              </div>
+            </div>
+            <p class="module-status" id="forecast-status" aria-live="polite"></p>
+            <div class="module-alert" id="forecast-unavailable" hidden></div>
+            <div class="metric-grid" id="forecast-totals"></div>
+            <div class="module-grid-2">
+              <article class="panel wide-panel">
+                <h3>Hourly forecast (kWh)</h3>
+                <p class="chart-caption">Shaded band: 10th to 90th percentile of held-out errors. Approximate, not a guarantee.</p>
+                <canvas id="forecast-hourly-chart" height="150" aria-label="Hourly forecast chart"></canvas>
+              </article>
+              <article class="panel">
+                <h3>Daily forecast (kWh)</h3>
+                <canvas id="forecast-daily-chart" height="150" aria-label="Daily forecast chart"></canvas>
+              </article>
+            </div>
+            <div class="module-grid-2">
+              <article class="panel">
+                <h3>Weather inputs (Open-Meteo)</h3>
+                <div id="forecast-weather"></div>
+              </article>
+              <article class="panel">
+                <h3>Warnings</h3>
+                <div id="forecast-warnings"></div>
+              </article>
+            </div>
+            <div class="module-grid-2">
+              <article class="panel">
+                <h3>Main factors</h3>
+                <p class="chart-caption">Permutation importance: how much held-out accuracy drops when an input is shuffled.</p>
+                <div id="forecast-factors"></div>
+              </article>
+              <article class="panel">
+                <h3>Accuracy on held-out data</h3>
+                <div id="forecast-metrics"></div>
+              </article>
+            </div>
+            <article class="panel">
+              <h3>Backtest: actual vs predicted (daily, held-out)</h3>
+              <canvas id="forecast-backtest-chart" height="130" aria-label="Backtest chart"></canvas>
+              <div class="module-table-wrap" id="forecast-backtest-table"></div>
+            </article>
+            <article class="panel">
+              <h3>Hourly forecast table</h3>
+              <div class="module-table-wrap">
+                <table class="module-table">
+                  <thead><tr><th>Time</th><th>Predicted kWh</th><th>Low kWh</th><th>High kWh</th><th>Ambient °C</th></tr></thead>
+                  <tbody id="forecast-hourly-rows"></tbody>
+                </table>
+              </div>
+            </article>
+            <article class="panel">
+              <h3>Saved forecast runs</h3>
+              <div class="module-table-wrap" id="forecast-runs"></div>
+            </article>
+            <article class="panel">
+              <h3>Assumptions</h3>
+              <ul class="module-list" id="forecast-assumptions"></ul>
+            </article>
+            <p class="module-foot" id="forecast-generated"></p>
+          </section>
+
+          <section class="view-panel module-view recovery-view" id="recovery-view" aria-labelledby="recovery-title" hidden>
+            <div class="module-heading">
+              <div>
+                <p class="eyebrow">MAINTENANCE RECOVERY</p>
+                <h2 id="recovery-title">Recovery Verification</h2>
+                <p class="module-subtitle">Compares daily performance before and after a recorded action. Results are observational and do not prove the action caused any change.</p>
+              </div>
+            </div>
+            <form class="module-form" id="recovery-form">
+              <label>Action
+                <select name="action_type" id="recovery-type" required></select>
+              </label>
+              <label>Date performed
+                <input name="performed_on" type="date" required>
+              </label>
+              <label class="module-form-wide">Notes
+                <input name="notes" maxlength="500" placeholder="Optional">
+              </label>
+              <button class="primary-button" type="submit">Record action</button>
+            </form>
+            <p class="module-status" id="recovery-status" aria-live="polite"></p>
+            <div class="module-grid-2">
+              <article class="panel">
+                <h3>Data coverage</h3>
+                <div id="recovery-coverage"></div>
+              </article>
+              <article class="panel">
+                <h3>Method</h3>
+                <p id="recovery-method" class="module-text"></p>
+              </article>
+            </div>
+            <article class="panel">
+              <h3>Maintenance history</h3>
+              <div class="module-table-wrap">
+                <table class="module-table">
+                  <thead>
+                    <tr><th>Date</th><th>Action</th><th>Verdict</th><th>PR before</th><th>PR after</th><th>PR change</th><th>Irradiation change</th><th>kWh/day change</th><th>Notes</th></tr>
+                  </thead>
+                  <tbody id="recovery-rows"></tbody>
+                </table>
+              </div>
+            </article>
+            <article class="panel">
+              <h3>Daily performance ratio around the selected action</h3>
+              <p class="chart-caption" id="recovery-chart-caption">Select an action in the history table to view its daily window.</p>
+              <canvas id="recovery-chart" height="130" aria-label="Performance ratio before and after maintenance"></canvas>
+            </article>
+          </section>
+
+          <section class="view-panel module-view settings-view" id="settings-view" aria-labelledby="settings-title" hidden>
+            <div class="module-heading">
+              <div>
+                <p class="eyebrow">WORKSPACE</p>
+                <h2 id="settings-title">Settings</h2>
+                <p class="module-subtitle">Preferences are saved to your account in PostgreSQL.</p>
+              </div>
+            </div>
+            <div class="module-grid-2">
+              <article class="panel">
+                <h3>Account</h3>
+                <dl class="module-dl">
+                  <dt>Name</dt><dd id="settings-name">Loading...</dd>
+                  <dt>Email</dt><dd id="settings-email">Loading...</dd>
+                </dl>
+              </article>
+              <article class="panel">
+                <h3>Forecast preferences</h3>
+                <form class="module-form-stack" id="settings-form">
+                  <label>Latitude
+                    <input name="latitude" type="number" step="0.0001" min="-90" max="90" required>
+                  </label>
+                  <label>Longitude
+                    <input name="longitude" type="number" step="0.0001" min="-180" max="180" required>
+                  </label>
+                  <label>Default forecast horizon
+                    <select name="default_horizon">
+                      <option value="24h">24 hours</option>
+                      <option value="7d">7 days</option>
+                      <option value="30d">30 days (unavailable until a longer weather source is added)</option>
+                    </select>
+                  </label>
+                  <label>Timezone (used for weather and forecast hours)
+                    <input name="timezone" type="text" list="settings-timezones" maxlength="64" required>
+                    <datalist id="settings-timezones">
+                      <option value="Asia/Singapore"></option>
+                      <option value="Asia/Kolkata"></option>
+                      <option value="Asia/Dubai"></option>
+                      <option value="Europe/London"></option>
+                      <option value="UTC"></option>
+                    </datalist>
+                  </label>
+                  <h3>Plant and alerts</h3>
+                  <label>Plant monitored
+                    <select name="plant_id">
+                      <option value="">Default (first plant)</option>
+                    </select>
+                  </label>
+                  <label>Low-generation alert threshold (%)
+                    <input name="alert_threshold_pct" type="number" step="0.5" min="5" max="50" required>
+                  </label>
+                  <label>Electricity tariff (₹ per kWh, optional, leave blank to use the ₹7/kWh planning rate)
+                    <input name="tariff_per_kwh" type="number" step="0.01" min="0">
+                  </label>
+                  <label>Energy display unit
+                    <select name="energy_unit">
+                      <option value="kWh">kWh</option>
+                      <option value="MWh">MWh</option>
+                    </select>
+                  </label>
+                  <button class="primary-button" type="submit">Save settings</button>
+                </form>
+                <p class="module-status" id="settings-status" aria-live="polite"></p>
+              </article>
+            </div>
+            <article class="panel">
+              <h3>Data sources</h3>
+              <ul class="module-list">
+                <li>Plant readings: imported CSV data stored in PostgreSQL.</li>
+                <li>Weather forecast: Open-Meteo (keyless).</li>
+                <li>External data: NASA POWER and PVGIS (keyless).</li>
+              </ul>
+            </article>
+            <article class="panel">
+              <h3>About the labels</h3>
+              <ul class="module-list">
+                <li>Forecast and simulated values are always labelled as such.</li>
+                <li>Maintenance verdicts are observational and do not prove cause.</li>
+              </ul>
+            </article>
+          </section>
+
+          <section class="view-panel secondary-view" id="secondary-view" aria-live="polite" hidden>
+            <div class="page-heading"><div><p class="eyebrow"><span class="status-pulse"></span> SOLARSENSE AI WORKSPACE</p><h1 id="secondary-title"></h1><p class="page-description" id="secondary-description"></p></div></div>
+            <article class="panel coming-panel"><span class="coming-icon"><svg class="icon"><use href="#icon-spark"/></svg></span><div><h2>This module is coming in the next build stage</h2><p>The overview and navigation foundation are ready. This feature will be implemented with clearly labeled simulated data and transparent assumptions.</p><span class="coming-stage" id="secondary-stage"></span></div></article>
+          </section>
+
+          <footer class="app-footer"><span>SolarSense AI <span class="footer-separator">·</span> LAKSHYA 2026</span><span>Powered by Zerol</span></footer>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

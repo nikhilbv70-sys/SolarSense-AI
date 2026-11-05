@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#F7F3E8">
+    <meta name="description" content="Sign in to the SolarSense AI demonstration dashboard.">
+    <title>Sign in | SolarSense AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/js/css/auth.css">
+    <script src="/js/api.js" defer></script>
+    <script src="/js/theme.js" defer></script>
+    <script src="/js/auth.js" defer></script>
+  </head>
+  <body>
+    <main class="auth-layout">
+      <section class="auth-main" aria-labelledby="auth-title">
+        <div class="auth-header">
+          <a class="brand" href="/js/login.html" aria-label="SolarSense AI home">
+            <span class="brand-mark" aria-hidden="true">
+              <img src="/assets/logo.jpg" alt="">
+            </span>
+            <span class="brand-name">SolarSense<span>AI</span><small>ENERGY INTELLIGENCE</small></span>
+          </a>
+          <button class="auth-theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode">
+            <svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+            <span class="theme-toggle-label">Dark mode</span>
+          </button>
+        </div>
+
+        <div class="auth-content">
+          <p class="eyebrow"><span></span> SOLAR INTELLIGENCE PLATFORM</p>
+          <h1 id="auth-title">Welcome back</h1>
+          <p class="intro">Sign in to continue to your SolarSense workspace.</p>
+
+          <form id="login-form">
+            <label class="field-label" for="login-email">Email address</label>
+            <input id="login-email" name="email" type="email" autocomplete="email" placeholder="you@company.com" required>
+
+            <div class="password-label">
+              <label class="field-label" for="login-password">Password</label>
+              <button class="text-action" type="button" data-forgot-password>Forgot password?</button>
+            </div>
+            <div class="password-field">
+              <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required minlength="8">
+              <button class="password-toggle" type="button" aria-label="Show password" aria-pressed="false">Show</button>
+            </div>
+
+            <section class="captcha-section" aria-label="Security check">
+              <span class="field-label">Security check</span>
+              <div class="captcha-box" data-captcha></div>
+            </section>
+            <button class="submit-button" type="submit">Sign in <span aria-hidden="true">→</span></button>
+            <p class="form-feedback" id="login-feedback" aria-live="polite"></p>
+          </form>
+
+          <p class="auth-switch">New to SolarSense? <a href="/js/signup.html">Create an account</a></p>
+        </div>
+
+        <footer class="auth-footer">
+          <span>SolarSense AI · LAKSHYA 2026</span>
+          <span>Powered by Zerol</span>
+        </footer>
+      </section>
+
+      <aside class="auth-visual" aria-label="SolarSense AI solar intelligence">
+        <div class="visual-content">
+          <span class="visual-kicker"><i></i> BUILT FOR CLEARER SOLAR OPERATIONS</span>
+          <h2>See your solar plant<br>with a little more <span>insight.</span></h2>
+          <p>Monitor performance, review sample anomalies, and explore assumption-led energy scenarios.</p>
+        </div>
+        <span class="visual-disclaimer">Illustrative solar artwork · No physical plant connected</span>
+      </aside>
+    </main>
+  </body>
+</html>

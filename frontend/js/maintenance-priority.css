@@ -1,0 +1,130 @@
+.priority-view {
+  display: grid;
+  gap: 16px;
+}
+
+.priority-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.priority-heading h2 {
+  margin: 4px 0;
+  color: var(--text);
+}
+
+.priority-subtitle,
+.priority-status {
+  margin: 0;
+  color: var(--muted);
+}
+
+.priority-status.is-error {
+  color: var(--red);
+}
+
+.priority-counts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.priority-count {
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.priority-count-label {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.priority-count-value {
+  color: var(--text);
+  font-size: 1.6rem;
+}
+
+.priority-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.priority-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.priority-table th,
+.priority-table td {
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text);
+}
+
+.priority-table th {
+  color: var(--muted);
+  font-weight: 600;
+  background: var(--surface-raised);
+}
+
+.priority-reason {
+  min-width: 220px;
+  color: var(--muted);
+}
+
+.priority-empty {
+  color: var(--muted);
+  text-align: center;
+}
+
+.priority-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.priority-score {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.priority-count.priority-critical { border-left-color: var(--red); }
+.priority-count.priority-high { border-left-color: var(--amber); }
+.priority-count.priority-medium { border-left-color: var(--accent); }
+.priority-count.priority-low { border-left-color: var(--subtle); }
+
+.priority-badge.priority-critical { background: rgba(248, 113, 113, .15); color: var(--red); }
+.priority-badge.priority-high { background: rgba(251, 191, 36, .18); color: #B45309; }
+.priority-badge.priority-medium { background: rgba(22, 163, 74, .15); color: var(--accent); }
+.priority-badge.priority-low { background: rgba(113, 132, 122, .15); color: var(--muted); }
+
+.priority-status-select {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+
+.priority-rules {
+  color: var(--muted);
+  font-size: 0.9rem;
+}

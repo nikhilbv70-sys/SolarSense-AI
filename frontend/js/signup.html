@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#F7F3E8">
+    <meta name="description" content="Create a SolarSense AI demo profile.">
+    <title>Create account | SolarSense AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/js/css/auth.css">
+    <script src="/js/api.js" defer></script>
+    <script src="/js/theme.js" defer></script>
+    <script src="/js/auth.js" defer></script>
+  </head>
+  <body>
+    <main class="auth-layout">
+      <section class="auth-main" aria-labelledby="auth-title">
+        <div class="auth-header">
+          <a class="brand" href="/js/login.html" aria-label="SolarSense AI home">
+            <span class="brand-mark" aria-hidden="true">
+              <img src="/assets/logo.jpg" alt="">
+            </span>
+            <span class="brand-name">SolarSense<span>AI</span><small>ENERGY INTELLIGENCE</small></span>
+          </a>
+          <button class="auth-theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode">
+            <svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l-1.42-1.42m11.3-11.3-1.42-1.42"/></svg>
+            <span class="theme-toggle-label">Dark mode</span>
+          </button>
+        </div>
+
+        <div class="auth-content signup-content">
+          <p class="eyebrow"><span></span> JOIN THE DEMONSTRATION</p>
+          <h1 id="auth-title">Create your account</h1>
+          <p class="intro">Set up a profile to explore the SolarSense experience.</p>
+
+          <form id="signup-form">
+            <label class="field-label" for="signup-name">Full name</label>
+            <input id="signup-name" name="name" type="text" autocomplete="name" placeholder="Your name" required minlength="2">
+
+            <label class="field-label" for="signup-email">Work email</label>
+            <input id="signup-email" name="email" type="email" autocomplete="email" placeholder="you@company.com" required>
+
+            <label class="field-label" for="signup-access">Access type</label>
+            <select id="signup-access" name="access">
+              <option value="normal_user">Normal user (solar plant owner)</option>
+              <option value="department_admin">Government department admin (needs approval)</option>
+              <option value="district_admin">Government district officer (needs approval)</option>
+              <option value="plant_operator">Government plant operator (needs approval)</option>
+            </select>
+
+            <label class="field-label" for="signup-organisation">Organisation <span class="field-hint">(government roles only)</span></label>
+            <input id="signup-organisation" name="organisation" type="text" autocomplete="organization" placeholder="Department or office name" maxlength="150">
+
+            <label class="field-label" for="signup-password">Password</label>
+            <div class="password-field">
+              <input id="signup-password" name="password" type="password" autocomplete="new-password" placeholder="At least 8 characters" required minlength="8">
+              <button class="password-toggle" type="button" aria-label="Show password" aria-pressed="false">Show</button>
+            </div>
+
+            <label class="field-label" for="signup-confirm">Confirm password</label>
+            <div class="password-field">
+              <input id="signup-confirm" name="confirm-password" type="password" autocomplete="new-password" placeholder="Enter your password again" required minlength="8">
+              <button class="password-toggle" type="button" aria-label="Show password" aria-pressed="false">Show</button>
+            </div>
+
+            <label class="demo-consent">
+              <input id="demo-consent" type="checkbox" required>
+              <span>I agree to create a SolarSense account with these details.</span>
+            </label>
+
+            <section class="captcha-section" aria-label="Security check">
+              <span class="field-label">Security check</span>
+              <div class="captcha-box" data-captcha></div>
+            </section>
+            <button class="submit-button" type="submit">Create account <span aria-hidden="true">→</span></button>
+            <p class="form-feedback" id="signup-feedback" aria-live="polite"></p>
+          </form>
+
+          <p class="auth-switch">Already have an account? <a href="/js/login.html">Sign in</a></p>
+        </div>
+
+        <footer class="auth-footer">
+          <span>SolarSense AI · LAKSHYA 2026</span>
+          <span>Powered by Zerol</span>
+        </footer>
+      </section>
+
+      <aside class="auth-visual" aria-label="SolarSense AI solar intelligence">
+        <div class="visual-content">
+          <span class="visual-kicker"><i></i> A CLEARER VIEW OF SOLAR</span>
+          <h2>From sample readings<br>to <span>smarter questions.</span></h2>
+          <p>Explore a considered solar monitoring interface with transparent, simulated insights.</p>
+        </div>
+        <span class="visual-disclaimer">Illustrative solar artwork · No physical plant connected</span>
+      </aside>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+
+{
+  "name": "solarsense-ai",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node frontend/server.js",
+    "server": "cd backend && python app.py"
+  },
+  "devDependencies": {
+    "vite": "^6.4.1"
+  }
+}

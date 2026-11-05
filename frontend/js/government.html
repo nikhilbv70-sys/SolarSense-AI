@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Portal · SolarSense AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="modules.css">
+    <link rel="stylesheet" href="government.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+    <script src="api.js" defer></script>
+    <script src="theme.js" defer></script>
+    <script src="government-capacity.js" defer></script>
+    <script src="government-fleet.js" defer></script>
+    <script src="forecast.js" defer></script>
+    <script src="government.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark"><img src="/assets/logo.jpg" alt=""></span><strong>SolarSense AI</strong><span>Government portal</span></div>
+      <div class="topbar-actions">
+        <button class="icon-button" type="button" data-theme-toggle aria-label="Switch to dark mode">Theme</button>
+        <span class="gov-user" id="gov-user"></span>
+        <button class="signout-button" type="button" id="gov-signout">Sign out</button>
+      </div>
+    </header>
+
+    <main class="gov-page">
+      <nav class="gov-tabs" role="tablist" aria-label="Government portal sections">
+        <button class="gov-tab is-active" type="button" role="tab" id="tab-btn-overview" aria-controls="tab-overview" aria-selected="true" data-tab="overview">Overview</button>
+        <button class="gov-tab" type="button" role="tab" id="tab-btn-registry" aria-controls="tab-registry" aria-selected="false" data-tab="registry">Plant registry</button>
+        <button class="gov-tab" type="button" role="tab" id="tab-btn-analytics" aria-controls="tab-analytics" aria-selected="false" data-tab="analytics">Analytics</button>
+        <button class="gov-tab" type="button" role="tab" id="tab-btn-prediction" aria-controls="tab-prediction" aria-selected="false" data-tab="prediction">Energy prediction</button>
+        <button class="gov-tab" type="button" role="tab" id="tab-btn-ranking" aria-controls="tab-ranking" aria-selected="false" data-tab="ranking">Attention ranking</button>
+        <button class="gov-tab" type="button" role="tab" id="tab-btn-maintenance" aria-controls="tab-maintenance" aria-selected="false" data-tab="maintenance">Maintenance</button>
+        <button class="gov-tab" type="button" role="tab" id="tab-btn-reports" aria-controls="tab-reports" aria-selected="false" data-tab="reports">Reports</button>
+        <button class="gov-tab" type="button" role="tab" id="tab-btn-audit" aria-controls="tab-audit" aria-selected="false" data-tab="audit">Audit</button>
+      </nav>
+
+      <section class="gov-tab-panel is-active" id="tab-overview" role="tabpanel" aria-labelledby="tab-btn-overview" data-panel="overview">
+        <p class="gov-sample-note">Plant figures are SIMULATED sample data. All-India capacity is real government data.</p>
+        <div class="gov-kpi-grid">
+          <article class="gov-kpi"><span>Registered plants</span><strong id="kpi-plants">—</strong><small>Simulated sample</small></article>
+          <article class="gov-kpi"><span>Sample installed capacity</span><strong id="kpi-capacity">—</strong><small>Simulated sample</small></article>
+          <article class="gov-kpi"><span>Daily generation (sample)</span><strong id="kpi-generation">—</strong><small>Simulated sample</small></article>
+          <article class="gov-kpi"><span>Underperforming plants</span><strong id="kpi-under">—</strong><small>Below 94% of expected</small></article>
+          <article class="gov-kpi"><span>All-India solar capacity</span><strong id="kpi-national">—</strong><small>Real government CSV</small></article>
+        </div>
+      </section>
+
+      <section class="gov-tab-panel" id="tab-registry" role="tabpanel" aria-labelledby="tab-btn-registry" data-panel="registry">
+        <p class="gov-sample-note">SIMULATED sample plants. Health badges are calculated from actual versus expected output.</p>
+        <div class="gov-toolbar">
+          <h2 class="gov-panel-title">Government plant registry</h2>
+          <label><span class="gov-hint">State </span><select class="gov-select" id="gov-state-filter"></select></label>
+        </div>
+        <div class="module-table-wrap">
+          <table class="module-table">
+            <thead><tr><th>Plant ID</th><th>Plant name</th><th>State</th><th>District</th><th>Capacity (kW)</th><th>Expected (kWh/day)</th><th>Actual (kWh/day)</th><th>Health</th></tr></thead>
+            <tbody id="registry-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="gov-tab-panel" id="tab-analytics" role="tabpanel" aria-labelledby="tab-btn-analytics" data-panel="analytics">
+        <p class="gov-sample-note">State capacity is REAL government data. The district table is SIMULATED.</p>
+        <section class="gov-capacity" aria-labelledby="gov-capacity-title">
+        <div class="section-toolbar">
+          <div class="section-title">
+            <h2 id="gov-capacity-title">Installed solar capacity by state</h2>
+            <span class="last-updated" id="gov-capacity-source">Source: state-wise installed capacity CSV</span>
+          </div>
+        </div>
+        <article class="panel">
+          <div class="panel-heading"><div><h2>Installed capacity by state</h2><p>Stacked MW by technology, from the government CSV</p></div><span class="chart-unit-pill">MW</span></div>
+          <div class="monitor-chart-container"><canvas id="gov-capacity-chart" role="img" aria-label="Stacked bar chart of installed capacity by state"></canvas></div>
+          <div class="chart-caption"><span id="gov-capacity-total">Loading…</span><span>Real government data</span></div>
+        </article>
+        <div class="module-table-wrap gov-capacity-table-wrap">
+          <table class="module-table" id="gov-capacity-table">
+            <thead><tr><th>State / UT</th><th>Solar (MW)</th><th>Wind (MW)</th><th>Bio power (MW)</th><th>Small hydro (MW)</th><th>Total (MW)</th></tr></thead>
+            <tbody id="gov-capacity-body"></tbody>
+          </table>
+        </div>
+        </section>
+        <h2 class="gov-panel-title">District energy performance (SIMULATED)</h2>
+        <div class="gov-district-toolbar">
+          <label><span class="gov-hint">State </span><select class="gov-select" id="gov-district-state"></select></label>
+        </div>
+        <article class="panel">
+          <div class="panel-heading"><div><h2>Capacity by district</h2><p>Simulated plants only. Green bars meet 94% of expected output, amber bars fall below it.</p></div></div>
+          <div class="monitor-chart-container"><canvas id="gov-district-chart" role="img" aria-label="Bar chart of simulated capacity by district"></canvas></div>
+        </article>
+        <div class="module-table-wrap">
+          <table class="module-table">
+            <thead><tr><th>State</th><th>District</th><th>Plants</th><th>Capacity (kW)</th><th>Actual ÷ expected</th></tr></thead>
+            <tbody id="district-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="gov-tab-panel" id="tab-prediction" role="tabpanel" aria-labelledby="tab-btn-prediction" data-panel="prediction">
+        <div class="module-view prediction-view" id="prediction-view" aria-labelledby="prediction-title">
+          <div class="module-heading">
+            <div>
+              <p class="eyebrow">FORECAST · NOT MEASURED</p>
+              <h2 id="prediction-title">Energy Prediction</h2>
+              <p class="module-subtitle" id="prediction-subtitle">Model estimates driven by Open-Meteo weather forecasts. Forecast values are never shown as measured generation.</p>
+            </div>
+            <div class="module-actions">
+              <div class="segmented" role="group" aria-label="Forecast horizon">
+                <button class="is-selected" type="button" data-horizon="24h">24 hours</button>
+                <button type="button" data-horizon="7d">7 days</button>
+                <button type="button" data-horizon="30d">30 days</button>
+              </div>
+              <button class="secondary-button" type="button" id="forecast-refresh">Refresh</button>
+              <button class="secondary-button" type="button" id="forecast-save">Save run</button>
+              <button class="primary-button" type="button" id="forecast-download">Download CSV</button>
+            </div>
+          </div>
+          <p class="module-status" id="forecast-status" aria-live="polite"></p>
+          <div class="module-alert" id="forecast-unavailable" hidden></div>
+          <div class="metric-grid" id="forecast-totals"></div>
+          <div class="module-grid-2">
+            <article class="panel wide-panel">
+              <h3>Hourly forecast (kWh)</h3>
+              <p class="chart-caption">Shaded band: 10th to 90th percentile of held-out errors. Approximate, not a guarantee.</p>
+              <canvas id="forecast-hourly-chart" height="150" aria-label="Hourly forecast chart"></canvas>
+            </article>
+            <article class="panel">
+              <h3>Daily forecast (kWh)</h3>
+              <canvas id="forecast-daily-chart" height="150" aria-label="Daily forecast chart"></canvas>
+            </article>
+          </div>
+          <div class="module-grid-2">
+            <article class="panel">
+              <h3>Weather inputs (Open-Meteo)</h3>
+              <div id="forecast-weather"></div>
+            </article>
+            <article class="panel">
+              <h3>Warnings</h3>
+              <div id="forecast-warnings"></div>
+            </article>
+          </div>
+          <div class="module-grid-2">
+            <article class="panel">
+              <h3>Main factors</h3>
+              <p class="chart-caption">Permutation importance: how much held-out accuracy drops when an input is shuffled.</p>
+              <div id="forecast-factors"></div>
+            </article>
+            <article class="panel">
+              <h3>Accuracy on held-out data</h3>
+              <div id="forecast-metrics"></div>
+            </article>
+          </div>
+          <article class="panel">
+            <h3>Backtest: actual vs predicted (daily, held-out)</h3>
+            <canvas id="forecast-backtest-chart" height="130" aria-label="Backtest chart"></canvas>
+            <div class="module-table-wrap" id="forecast-backtest-table"></div>
+          </article>
+          <article class="panel">
+            <h3>Hourly forecast table</h3>
+            <div class="module-table-wrap">
+              <table class="module-table">
+                <thead><tr><th>Time</th><th>Predicted kWh</th><th>Low kWh</th><th>High kWh</th><th>Ambient °C</th></tr></thead>
+                <tbody id="forecast-hourly-rows"></tbody>
+              </table>
+            </div>
+          </article>
+          <article class="panel">
+            <h3>Saved forecast runs</h3>
+            <div class="module-table-wrap" id="forecast-runs"></div>
+          </article>
+          <article class="panel">
+            <h3>Assumptions</h3>
+            <ul class="module-list" id="forecast-assumptions"></ul>
+          </article>
+          <p class="module-foot" id="forecast-generated"></p>
+        </div>
+      </section>
+
+      <section class="gov-tab-panel" id="tab-ranking" role="tabpanel" aria-labelledby="tab-btn-ranking" data-panel="ranking">
+        <p class="gov-sample-note">SIMULATED sample data. Plants with the lowest output compared with expected come first.</p>
+        <h2 class="gov-panel-title">Attention ranking</h2>
+        <div class="module-table-wrap">
+          <table class="module-table">
+            <thead><tr><th>Rank</th><th>Plant</th><th>State</th><th>Performance</th><th>Priority</th><th>Reason</th></tr></thead>
+            <tbody id="ranking-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="gov-tab-panel" id="tab-maintenance" role="tabpanel" aria-labelledby="tab-btn-maintenance" data-panel="maintenance">
+        <p class="gov-sample-note">SIMULATED sample data. Status changes and assignments are added in Phase 7.</p>
+        <h2 class="gov-panel-title">Maintenance command</h2>
+        <p class="gov-hint" id="maint-summary"></p>
+        <div class="module-table-wrap">
+          <table class="module-table">
+            <thead><tr><th>Plant</th><th>Priority</th><th>Recommended inspection</th><th>Last service</th><th>Status</th></tr></thead>
+            <tbody id="maint-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="gov-tab-panel" id="tab-reports" role="tabpanel" aria-labelledby="tab-btn-reports" data-panel="reports">
+        <h2 class="gov-panel-title">Reports</h2>
+        <p class="gov-hint">Downloads the sample plant registry with performance and priority. The file is labelled SIMULATED.</p>
+        <button class="gov-button" type="button" id="report-download">Download sample fleet report (CSV)</button>
+      </section>
+
+      <section class="gov-tab-panel" id="tab-audit" role="tabpanel" aria-labelledby="tab-btn-audit" data-panel="audit">
+        <p class="gov-sample-note">SIMULATED sample entries. The live audit log is connected in Phase 7.</p>
+        <h2 class="gov-panel-title">Audit history</h2>
+        <div class="module-table-wrap">
+          <table class="module-table">
+            <thead><tr><th>Time</th><th>User</th><th>Action</th><th>Target</th></tr></thead>
+            <tbody id="audit-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+  </body>
+</html>

@@ -1,0 +1,83 @@
+{
+  "model_name": "RandomForest hourly (irradiance, ambient temperature, hour of day)",
+  "features": [
+    "irradiance_w_m2",
+    "ambient_temp_c",
+    "hour_sin",
+    "hour_cos"
+  ],
+  "training_hours": 629,
+  "holdout_hours": 158,
+  "training_period": [
+    "2020-05-15 00:00:00",
+    "2020-06-11 08:00:00"
+  ],
+  "holdout_period": [
+    "2020-06-11 09:00:00",
+    "2020-06-17 23:00:00"
+  ],
+  "holdout": {
+    "mae_kwh": 244.57,
+    "rmse_kwh": 456.15,
+    "r2": 0.9966,
+    "daylight_mae_kwh": 415.51
+  },
+  "baseline_same_hour": {
+    "mae_kwh": 1415.53,
+    "rmse_kwh": 2547.5,
+    "r2": 0.8929
+  },
+  "residual_q10_kwh": -64.36,
+  "residual_q90_kwh": 739.77,
+  "factors": [
+    {
+      "feature": "irradiance_w_m2",
+      "r2_drop": 1.9218
+    },
+    {
+      "feature": "ambient_temp_c",
+      "r2_drop": -0.0
+    },
+    {
+      "feature": "hour_cos",
+      "r2_drop": 0.0
+    },
+    {
+      "feature": "hour_sin",
+      "r2_drop": -0.0001
+    }
+  ],
+  "daily_backtest": [
+    {
+      "date": "2020-06-12",
+      "actual_kwh": 127822.4,
+      "predicted_kwh": 121712.6
+    },
+    {
+      "date": "2020-06-13",
+      "actual_kwh": 185508.2,
+      "predicted_kwh": 184305.3
+    },
+    {
+      "date": "2020-06-14",
+      "actual_kwh": 155377.3,
+      "predicted_kwh": 155622.1
+    },
+    {
+      "date": "2020-06-15",
+      "actual_kwh": 148121.0,
+      "predicted_kwh": 145609.6
+    },
+    {
+      "date": "2020-06-16",
+      "actual_kwh": 136376.7,
+      "predicted_kwh": 132867.4
+    },
+    {
+      "date": "2020-06-17",
+      "actual_kwh": 129875.1,
+      "predicted_kwh": 125185.8
+    }
+  ],
+  "data_source": "data/Plant_1_Generation_Data.csv and data/Plant_1_Weather_Sensor_Data.csv (real 2020 readings)"
+}

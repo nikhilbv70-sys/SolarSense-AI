@@ -1,0 +1,31 @@
+.cost-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.cost-kpi {
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid var(--line, #E2E8F0);
+  border-radius: 12px;
+  background: var(--surface, #FFFFFF);
+}
+
+.cost-kpi-label,
+.cost-kpi-note {
+  color: var(--muted, #64748B);
+  font-size: 12px;
+}
+
+.cost-kpi-value {
+  font-size: 20px;
+  color: var(--ink, #0F172A);
+}
+
+.cost-table td.is-error {
+  color: #B91C1C;
+  font-weight: 600;
+}

@@ -1,0 +1,10 @@
+pandas
+numpy
+scikit-learn
+joblib
+Flask
+Flask-Cors
+SQLAlchemy
+psycopg[binary]
+python-dotenv
+gunicorn

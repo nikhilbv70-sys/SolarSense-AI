@@ -36,6 +36,13 @@ from government_routes import government_bp
 # ==========================================
 
 app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return jsonify({
+        "status": "success",
+        "message": "SolarSense AI backend is running!"
+    })
 app_environment = os.getenv("APP_ENV", "development").lower()
 configured_secret = os.getenv("SECRET_KEY")
 if app_environment == "production" and not configured_secret:

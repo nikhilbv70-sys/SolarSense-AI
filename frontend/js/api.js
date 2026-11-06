@@ -1,4 +1,4 @@
-```javascript
+
 (function () {
   // Use the same Render domain for frontend and Flask backend.
   // Locally, use the Flask server on port 5000.
@@ -236,4 +236,3 @@
     }
   };
 })();
-```

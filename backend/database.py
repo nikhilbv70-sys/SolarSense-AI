@@ -19,16 +19,35 @@ from datetime import datetime, timezone
 
 load_dotenv()
 
-DATABASE_URL = (
-    f"postgresql+psycopg://{os.getenv('DB_USER')}:"
-    f"{os.getenv('DB_PASSWORD')}@"
-    f"{os.getenv('DB_HOST')}:"
-    f"{os.getenv('DB_PORT')}/"
-    f"{os.getenv('DB_NAME')}"
-)
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    if DATABASE_URL.startswith("postgres://"):
+        DATABASE_URL = DATABASE_URL.replace(
+            "postgres://",
+            "postgresql+psycopg://",
+            1
+        )
+    elif DATABASE_URL.startswith("postgresql://"):
+        DATABASE_URL = DATABASE_URL.replace(
+            "postgresql://",
+            "postgresql+psycopg://",
+            1
+        )
+else:
+    DATABASE_URL = (
+        f"postgresql+psycopg://{os.getenv('DB_USER')}:"
+        f"{os.getenv('DB_PASSWORD')}@"
+        f"{os.getenv('DB_HOST')}:"
+        f"{os.getenv('DB_PORT')}/"
+        f"{os.getenv('DB_NAME')}"
+    )
 
 engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 Base = declarative_base()
+
+ 
 
 DEFAULT_TIMEZONE = "Asia/Singapore"
 DEFAULT_ALERT_THRESHOLD_PCT = 15.0

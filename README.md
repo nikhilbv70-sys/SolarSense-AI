@@ -137,17 +137,9 @@ Start the frontend (port 4178), from the repo root in a second terminal:
 node frontend/server.js
 ```
 
-Or use the npm scripts from the repo root: `npm run server` for the backend and `npm run dev` for the frontend.
 
-Open `http://127.0.0.1:4178` in a browser. The frontend calls the API at `http://127.0.0.1:5000`.
 
-## Ports
 
-| Service | Address |
-|---|---|
-| Frontend | `http://127.0.0.1:4178` |
-| Backend API | `http://127.0.0.1:5000` |
-| PostgreSQL | `DB_HOST:DB_PORT` (default `5432`) |
 
 ## API overview
 
